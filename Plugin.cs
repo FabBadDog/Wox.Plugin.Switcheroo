@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using S = Switcheroo;
+using Wox.Infrastructure.Hotkey;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Wox.Plugin.Switcheroo
 {
@@ -16,6 +20,32 @@ namespace Wox.Plugin.Switcheroo
         {
             this.context = context;
             S.CoreStuff.Initialize();
+            context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
+        }
+
+        bool API_GlobalKeyboardEvent(int keyevent, int vkcode, SpecialKeyState state)
+        {
+            if (keyevent == (int)KeyEvent.WM_SYSKEYDOWN && vkcode == (int)Keys.Tab && state.AltPressed)
+            {
+                OnAltTabPressed();
+                return false;
+            }
+            if (keyevent == (int)KeyEvent.WM_SYSKEYUP && vkcode == (int)Keys.Tab)
+            {
+                //prevent system alt+tab action
+                return false;
+            }
+            return true;
+        }
+
+        private void OnAltTabPressed()
+        {
+            //return as soon as possible
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                context.API.ShowApp();
+                context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
+            });
         }
 
         public String IconImageDataUri(S.AppWindow self)
@@ -35,9 +65,10 @@ namespace Wox.Plugin.Switcheroo
                         var b64String = Convert.ToBase64String(memoryStream.ToArray());
                         iconImageDataUri = "data:image/png;base64," + b64String;
                         System.Runtime.Caching.MemoryCache.Default.Add(key, iconImageDataUri, DateTimeOffset.Now.AddHours(1));
-                    } 
+                    }
                 }
-                catch {
+                catch
+                {
                     return null;
                 }
             }
@@ -50,7 +81,20 @@ namespace Wox.Plugin.Switcheroo
             S.CoreStuff.WindowList.Clear();
             S.CoreStuff.GetWindows();
 
-            var filterResults = S.CoreStuff.FilterList(queryString).ToList();
+            List<S.FilterResult> filterResults = S.CoreStuff.FilterList(queryString).ToList();
+            S.FilterResult woxResult = filterResults.FirstOrDefault(o => o.AppWindow.Title == "Wox");
+            if (woxResult != null)
+            {
+                filterResults.Remove(woxResult);
+            }
+
+            //swap first and second position
+            if (filterResults.Count > 1)
+            {
+                var swap = filterResults[0];
+                filterResults[0] = filterResults[1];
+                filterResults[1] = swap;
+            }
 
             return filterResults.Select(o =>
             {
@@ -61,16 +105,8 @@ namespace Wox.Plugin.Switcheroo
                     IcoPath = IconImageDataUri(o.AppWindow),
                     Action = con =>
                     {
-                        context.HideApp();
-                        if (con.SpecialKeyState.CtrlPressed)
-                        {
-                            o.AppWindow.PostClose();
-                            o.AppWindow.SwitchTo();
-                        }
-                        else
-                        {
-                            o.AppWindow.SwitchTo();
-                        }
+                        o.AppWindow.SwitchTo();
+                        context.API.HideApp();
                         return true;
                     }
                 };

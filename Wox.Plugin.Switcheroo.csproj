@@ -46,9 +46,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Wox.Plugin">
-      <HintPath>packages\Wox.Plugin.1.0.0\lib\Wox.Plugin.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Wox.Infrastructure">
+      <HintPath>..\Wox\Output\Debug\Wox.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Wox.Plugin, Version=1.1.1.323, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Wox\Output\Debug\Wox.Plugin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
