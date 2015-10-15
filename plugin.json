@@ -7,5 +7,6 @@
     "Version": "1.0.1",
     "Language": "csharp",
     "Website": "https://github.com/orzFly/Wox.Plugin.Switcheroo",
+    "IcoPath": "Images\\switcheroo.png",
     "ExecuteFileName": "Wox.Plugin.Switcheroo.dll"
 }
