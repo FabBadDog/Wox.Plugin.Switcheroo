@@ -1,9 +1,9 @@
 {
-    "ID": "F6337B07F1034E9494231720BA624331",
+    "ID": "DB634BE6F3D34F6D9D64F7C2AEE3ECEC",
     "ActionKeyword": "win",
     "Name": "Switcheroo for Wox",
     "Description": "The humble incremental-search task switcher for Wox",
-    "Author": "orzFly, Regin Larsen, James Sulak, qianlifeng, Boromak",
+    "Author": "orzFly, Regin Larsen, James Sulak, qianlifeng",
     "Version": "1.0.2",
     "Language": "csharp",
     "Website": "https://github.com/lances101/Wox.Plugin.Switcheroo",
