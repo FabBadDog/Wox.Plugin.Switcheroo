@@ -1,7 +1,25 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBD}") = "Wox.Plugin.Switcheroo", "Wox.Plugin.Switcheroo.csproj", "{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}"
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wox.Plugin.Switcheroo", "Wox.Plugin.Switcheroo.csproj", "{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Switcheroo", "Switcheroo\Switcheroo\Switcheroo.csproj", "{B28E183B-0E38-48A8-8A4E-B4AB7B23CE93}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A} = {FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedWinapi", "Switcheroo\ManagedWinapi\ManagedWinapi.csproj", "{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Switcheroo\Core\Core.csproj", "{B846514D-25BE-4274-972A-0E6E74DD0F8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{F5126702-2DD8-4A5F-8410-7327D583747C}"
+	ProjectSection(SolutionItems) = preProject
+		Switcheroo\Build.proj = Switcheroo\Build.proj
+		Switcheroo\.build\MSBuild.Community.Tasks.dll = Switcheroo\.build\MSBuild.Community.Tasks.dll
+		Switcheroo\.build\MSBuild.Community.Tasks.targets = Switcheroo\.build\MSBuild.Community.Tasks.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +31,18 @@ Global
 		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B28E183B-0E38-48A8-8A4E-B4AB7B23CE93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B28E183B-0E38-48A8-8A4E-B4AB7B23CE93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B28E183B-0E38-48A8-8A4E-B4AB7B23CE93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B28E183B-0E38-48A8-8A4E-B4AB7B23CE93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

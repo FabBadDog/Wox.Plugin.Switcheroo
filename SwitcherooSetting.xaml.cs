@@ -29,19 +29,18 @@ namespace Wox.Plugin.Switcheroo
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            cbOverrideAltTab.Content += " (buggy. Wox shows up, but does not get focused)";
             cbOverrideAltTab.IsChecked = SwitcherooStorage.Instance.OverrideAltTab;
 
             cbOverrideAltTab.Checked += (o, args) =>
             {
                 SwitcherooStorage.Instance.OverrideAltTab = true;
                 SwitcherooStorage.Instance.Save();
-                _plugin.AltTabHookCheck();
             };
             cbOverrideAltTab.Unchecked += (o, args) =>
             {
                 SwitcherooStorage.Instance.OverrideAltTab = false;
                 SwitcherooStorage.Instance.Save();
-                _plugin.AltTabHookCheck();
             };
         }
     }
