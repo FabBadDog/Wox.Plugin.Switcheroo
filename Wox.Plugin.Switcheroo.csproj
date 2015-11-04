@@ -70,7 +70,6 @@
       <DependentUpon>SwitcherooSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="SwitcherooStorage.cs" />
-    <Compile Include="Workarounds.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
