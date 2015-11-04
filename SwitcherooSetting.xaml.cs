@@ -43,5 +43,10 @@ namespace Wox.Plugin.Switcheroo
                 SwitcherooStorage.Instance.Save();
             };
         }
+
+        private void label_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/kvakulo/Switcheroo");
+        }
     }
 }

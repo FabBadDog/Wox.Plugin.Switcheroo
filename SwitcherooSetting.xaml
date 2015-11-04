@@ -8,6 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
     <Grid>
         <CheckBox x:Name="cbOverrideAltTab" Content="Override Alt Tab with Switcheroo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="label" Text="Main Switcharoo GitHub page" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="DodgerBlue" TextDecorations="Underline" MouseUp="label_MouseUp"  />
 
     </Grid>
 </UserControl>

@@ -9,7 +9,6 @@ using System.Windows.Media.Imaging;
 using ManagedWinapi.Windows;
 using Switcheroo;
 using Switcheroo.Core;
-using Wox.Infrastructure;
 using Wox.Infrastructure.Hotkey;
 using Wox.Plugin.Features;
 using Control = System.Windows.Controls.Control;
@@ -96,7 +95,6 @@ namespace Wox.Plugin.Switcheroo
         {
             var key = "IconImageDataUri-" + self.HWnd;
             var iconImageDataUri = MemoryCache.Default.Get(key) as string;
-            ;
             if (iconImageDataUri == null)
             {
                 try
