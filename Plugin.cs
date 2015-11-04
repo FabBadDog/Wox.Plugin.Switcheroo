@@ -2,29 +2,69 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Media.Imaging;
-using S = Switcheroo;
-using Wox.Infrastructure.Hotkey;
-using System.Windows.Forms;
-using System.Diagnostics;
+using System.Runtime.Caching;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Media.Imaging;
+using ManagedWinapi.Windows;
+using Switcheroo;
+using Switcheroo.Core;
+using Wox.Infrastructure.Hotkey;
+using Wox.Plugin.Features;
+using Control = System.Windows.Controls.Control;
 
 namespace Wox.Plugin.Switcheroo
 {
-    public class Plugin : IPlugin
+    public class Plugin : IPlugin, ISettingProvider, IContextMenu
     {
+        private bool altTabHooked;
         protected PluginInitContext context;
-
         public void Init(PluginInitContext context)
         {
             this.context = context;
-            S.CoreStuff.Initialize();
             context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
         }
 
-        bool API_GlobalKeyboardEvent(int keyevent, int vkcode, SpecialKeyState state)
+        public Control CreateSettingPanel()
         {
+            return new SwitcherooSetting(this);
+        }
+
+        public List<Result> Query(Query query)
+        {       
+            var queryString = query.GetAllRemainingParameter();
+
+            var windowContext = new WindowFilterContext<AppWindowViewModel>
+            {
+                Windows = new WindowFinder().GetWindows().Select(w => new AppWindowViewModel(w)),
+                ForegroundWindowProcessTitle = new AppWindow(SystemWindow.ForegroundWindow.HWnd).ProcessTitle
+            };
+
+            var filterResults = new WindowFilterer().Filter(windowContext, queryString).Select(o=>o.AppWindow.AppWindow).ToList();
+
+
+            return filterResults.Select(o =>
+            {
+                return new Result
+                {
+                    Title = o.Title,
+                    SubTitle = o.ProcessTitle,
+                    IcoPath = IconImageDataUri(o),
+                    ContextData = o,
+                    Action = con =>
+                    {
+                        o.SwitchTo();
+                        context.API.HideApp();
+                        return true;
+                    }
+                };
+            }).ToList();
+        }
+
+
+        private bool API_GlobalKeyboardEvent(int keyevent, int vkcode, SpecialKeyState state)
+        {
+            if (!SwitcherooStorage.Instance.OverrideAltTab) return true;
             if (keyevent == (int)KeyEvent.WM_SYSKEYDOWN && vkcode == (int)Keys.Tab && state.AltPressed)
             {
                 OnAltTabPressed();
@@ -40,31 +80,33 @@ namespace Wox.Plugin.Switcheroo
 
         private void OnAltTabPressed()
         {
+            
             //return as soon as possible
             ThreadPool.QueueUserWorkItem(o =>
             {
+                context.API.HideApp();
                 context.API.ShowApp();
                 context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
             });
         }
 
-        public String IconImageDataUri(S.AppWindow self)
+
+        public string IconImageDataUri(AppWindow self)
         {
             var key = "IconImageDataUri-" + self.HWnd;
-            var iconImageDataUri = System.Runtime.Caching.MemoryCache.Default.Get(key) as String; ;
+            var iconImageDataUri = MemoryCache.Default.Get(key) as string;
             if (iconImageDataUri == null)
             {
-                var iconImage = self.IconImage;
                 try
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (var memoryStream = new MemoryStream())
                     {
                         BitmapEncoder encoder = new PngBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(iconImage));
+                        encoder.Frames.Add(BitmapFrame.Create(new IconToBitmapImageConverter().Convert(self.LargeWindowIcon)));
                         encoder.Save(memoryStream);
                         var b64String = Convert.ToBase64String(memoryStream.ToArray());
                         iconImageDataUri = "data:image/png;base64," + b64String;
-                        System.Runtime.Caching.MemoryCache.Default.Add(key, iconImageDataUri, DateTimeOffset.Now.AddHours(1));
+                        MemoryCache.Default.Add(key, iconImageDataUri, DateTimeOffset.Now.AddHours(1));
                     }
                 }
                 catch
@@ -75,42 +117,23 @@ namespace Wox.Plugin.Switcheroo
             return iconImageDataUri;
         }
 
-        public List<Result> Query(Query query)
+        public List<Result> LoadContextMenus(Result selectedResult)
         {
-            var queryString = query.GetAllRemainingParameter();
-            S.CoreStuff.WindowList.Clear();
-            S.CoreStuff.GetWindows();
-
-            List<S.FilterResult> filterResults = S.CoreStuff.FilterList(queryString).ToList();
-            S.FilterResult woxResult = filterResults.FirstOrDefault(o => o.AppWindow.Title == "Wox");
-            if (woxResult != null)
+            AppWindow app = (AppWindow) selectedResult.ContextData;
+            return new List<Result>
             {
-                filterResults.Remove(woxResult);
-            }
-
-            //swap first and second position
-            if (filterResults.Count > 1)
-            {
-                var swap = filterResults[0];
-                filterResults[0] = filterResults[1];
-                filterResults[1] = swap;
-            }
-
-            return filterResults.Select(o =>
-            {
-                return new Result()
+                new Result
                 {
-                    Title = o.AppWindow.Title,
-                    SubTitle = o.AppWindow.ProcessTitle,
-                    IcoPath = IconImageDataUri(o.AppWindow),
-                    Action = con =>
+                    Title = "Close " + app.Title,
+                    IcoPath = IconImageDataUri(app),
+                    Action = e =>
                     {
-                        o.AppWindow.SwitchTo();
-                        context.API.HideApp();
+                        context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
+                        app.PostClose();
                         return true;
                     }
-                };
-            }).ToList();
+                }
+            };
         }
     }
 }
