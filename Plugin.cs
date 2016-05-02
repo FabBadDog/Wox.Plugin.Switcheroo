@@ -10,6 +10,7 @@ using ManagedWinapi.Windows;
 using Switcheroo;
 using Switcheroo.Core;
 using Wox.Infrastructure.Hotkey;
+using Wox.Infrastructure.Storage;
 using Wox.Plugin.Features;
 using Control = System.Windows.Controls.Control;
 
@@ -19,15 +20,19 @@ namespace Wox.Plugin.Switcheroo
     {
         private bool altTabHooked;
         protected PluginInitContext context;
+        private SwitcherooSettings settings;
+        private PluginJsonStorage<SwitcherooSettings> storage;
         public void Init(PluginInitContext context)
         {
             this.context = context;
+            storage = new PluginJsonStorage<SwitcherooSettings>();
+            settings = storage.Load();
             context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
         }
 
         public Control CreateSettingPanel()
         {
-            return new SwitcherooSetting(this);
+            return new SwitcherooSetting(settings, storage);
         }
 
         public List<Result> Query(Query query)
@@ -64,7 +69,7 @@ namespace Wox.Plugin.Switcheroo
 
         private bool API_GlobalKeyboardEvent(int keyevent, int vkcode, SpecialKeyState state)
         {
-            if (!SwitcherooStorage.Instance.OverrideAltTab) return true;
+            if (!settings.OverrideAltTab) return true;
             if (keyevent == (int)KeyEvent.WM_SYSKEYDOWN && vkcode == (int)Keys.Tab && state.AltPressed)
             {
                 OnAltTabPressed();

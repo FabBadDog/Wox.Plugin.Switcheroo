@@ -70,7 +70,7 @@
     <Compile Include="SwitcherooSetting.xaml.cs">
       <DependentUpon>SwitcherooSetting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SwitcherooStorage.cs" />
+    <Compile Include="SwitcherooSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wox.Infrastructure.Storage;
 
 namespace Wox.Plugin.Switcheroo
 {
@@ -19,28 +20,30 @@ namespace Wox.Plugin.Switcheroo
     /// </summary>
     public partial class SwitcherooSetting : UserControl
     {
-        private readonly Plugin _plugin;
+        private readonly SwitcherooSettings _settings;
+        private readonly PluginJsonStorage<SwitcherooSettings> _storage;
 
-        public SwitcherooSetting(Plugin plugin)
+        public SwitcherooSetting(SwitcherooSettings settings, PluginJsonStorage<SwitcherooSettings> storage)
         {
-            _plugin = plugin;
+            _settings = settings;
+            _storage = storage;
+
             InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            cbOverrideAltTab.Content += " (buggy. Wox shows up, but does not get focused)";
-            cbOverrideAltTab.IsChecked = SwitcherooStorage.Instance.OverrideAltTab;
+            cbOverrideAltTab.IsChecked = _settings.OverrideAltTab;
 
             cbOverrideAltTab.Checked += (o, args) =>
             {
-                SwitcherooStorage.Instance.OverrideAltTab = true;
-                SwitcherooStorage.Instance.Save();
+                _settings.OverrideAltTab = true;
+                _storage.Save();
             };
             cbOverrideAltTab.Unchecked += (o, args) =>
             {
-                SwitcherooStorage.Instance.OverrideAltTab = false;
-                SwitcherooStorage.Instance.Save();
+                _settings.OverrideAltTab = false;
+                _storage.Save();
             };
         }
 
