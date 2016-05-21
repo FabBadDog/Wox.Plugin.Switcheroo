@@ -6,7 +6,7 @@
     "Author": "orzFly, Regin Larsen, James Sulak, qianlifeng",
     "Version": "1.0.6",
     "Language": "csharp",
-    "Website": "https://github.com/lances101/Wox.Plugin.Switcheroo",
+    "Website": "https://github.com/Wox-launcher/Wox.Plugin.Switcheroo",
     "IcoPath": "Images\\switcheroo.png",
     "ExecuteFileName": "Wox.Plugin.Switcheroo.dll"
 }
