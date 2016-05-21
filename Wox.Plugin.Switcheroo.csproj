@@ -90,11 +90,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Switcheroo-Edited-For-Wox\Core\Core.csproj">
+    <ProjectReference Include="..\..\Wox.Plugin\Wox.Plugin.csproj">
+      <Project>{8451ecdd-2ea4-4966-bb0a-7bbc40138e80}</Project>
+      <Name>Wox.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="Switcheroo\Core\Core.csproj">
       <Project>{b846514d-25be-4274-972a-0e6e74dd0f8b}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="Switcheroo-Edited-For-Wox\ManagedWinapi\ManagedWinapi.csproj">
+    <ProjectReference Include="Switcheroo\ManagedWinapi\ManagedWinapi.csproj">
       <Project>{fbd3ec1e-47e2-4d2d-81c9-d6506125a09a}</Project>
       <Name>ManagedWinapi</Name>
     </ProjectReference>
