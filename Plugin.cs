@@ -80,8 +80,8 @@ namespace Wox.Plugin.Switcheroo
 
         private void OnAltTabPressed()
         {
-            context.API.ShowApp();
             context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
+            context.API.ShowApp();
         }
 
 
