@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Management.Instrumentation;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ManagedWinapi.Windows;
 using Switcheroo;
@@ -8,26 +11,46 @@ using Switcheroo.Core;
 using Wox.Infrastructure.Hotkey;
 using Wox.Infrastructure.Storage;
 using Control = System.Windows.Controls.Control;
+using System.Windows;
+using Application = System.Windows.Application;
+using ManagedWinapi;
 
 namespace Wox.Plugin.Switcheroo
 {
     public class Plugin : IPlugin, ISettingProvider, IContextMenu
     {
-        private bool altTabHooked;
-        protected PluginInitContext context;
-        private SwitcherooSettings settings;
-        private PluginJsonStorage<SwitcherooSettings> storage;
-        public void Init(PluginInitContext context)
+        private bool _altTabHooked;
+        private SwitcherooSettings _settings;
+        private PluginJsonStorage<SwitcherooSettings> _storage;
+        private IntPtr _woxWindowHandle;
+        protected PluginInitContext Context;
+
+
+        public List<Result> LoadContextMenus(Result selectedResult)
         {
-            this.context = context;
-            storage = new PluginJsonStorage<SwitcherooSettings>();
-            settings = storage.Load();
-            context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
+            var app = (AppWindow) selectedResult.ContextData;
+            return new List<Result>
+            {
+                new Result
+                {
+                    Title = "Close " + app.Title,
+                    IcoPath = app.ExecutablePath,
+                    Action = e =>
+                    {
+                        Context.API.ChangeQuery(Context.CurrentPluginMetadata.ActionKeyword + " ", true);
+                        app.PostClose();
+                        return true;
+                    }
+                }
+            };
         }
 
-        public Control CreateSettingPanel()
+        public void Init(PluginInitContext context)
         {
-            return new SwitcherooSetting(settings, storage);
+            Context = context;
+            _storage = new PluginJsonStorage<SwitcherooSettings>();
+            _settings = _storage.Load();
+            context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
         }
 
         public List<Result> Query(Query query)
@@ -40,7 +63,8 @@ namespace Wox.Plugin.Switcheroo
                 ForegroundWindowProcessTitle = new AppWindow(SystemWindow.ForegroundWindow.HWnd).ProcessTitle
             };
 
-            var filterResults = new WindowFilterer().Filter(windowContext, queryString).Select(o => o.AppWindow.AppWindow).ToList();
+            var filterResults =
+                new WindowFilterer().Filter(windowContext, queryString).Select(o => o.AppWindow.AppWindow).ToList();
 
 
             return filterResults.Select(o =>
@@ -54,23 +78,46 @@ namespace Wox.Plugin.Switcheroo
                     Action = con =>
                     {
                         o.SwitchTo();
-                        context.API.HideApp();
+                        Context.API.HideApp();
                         return true;
                     }
                 };
             }).ToList();
         }
 
+        public Control CreateSettingPanel()
+        {
+            return new SwitcherooSetting(_settings, _storage);
+        }
+
+        private void ActivateWindow()
+        {
+            var altKey = new KeyboardKey(Keys.Alt);
+            var altKeyPressed = false;
+
+            if ((altKey.AsyncState & 0x8000) == 0)
+            {
+                altKey.Press();
+                altKeyPressed = true;
+            }
+
+            Context.API.ShowApp();
+            
+            if (altKeyPressed)
+            {
+                altKey.Release();
+            }
+        }
 
         private bool API_GlobalKeyboardEvent(int keyevent, int vkcode, SpecialKeyState state)
         {
-            if (!settings.OverrideAltTab) return true;
-            if (keyevent == (int)KeyEvent.WM_SYSKEYDOWN && vkcode == (int)Keys.Tab && state.AltPressed)
+            if (!_settings.OverrideAltTab) return true;
+            if (keyevent == (int) KeyEvent.WM_SYSKEYDOWN && vkcode == (int) Keys.Tab && state.AltPressed)
             {
                 OnAltTabPressed();
                 return false;
             }
-            if (keyevent == (int)KeyEvent.WM_SYSKEYUP && vkcode == (int)Keys.Tab)
+            if (keyevent == (int) KeyEvent.WM_SYSKEYUP && vkcode == (int) Keys.Tab)
             {
                 //prevent system alt+tab action
                 return false;
@@ -80,28 +127,8 @@ namespace Wox.Plugin.Switcheroo
 
         private void OnAltTabPressed()
         {
-            context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
-            context.API.ShowApp();
-        }
-
-
-        public List<Result> LoadContextMenus(Result selectedResult)
-        {
-            AppWindow app = (AppWindow)selectedResult.ContextData;
-            return new List<Result>
-            {
-                new Result
-                {
-                    Title = "Close " + app.Title,
-                    IcoPath = app.ExecutablePath,
-                    Action = e =>
-                    {
-                        context.API.ChangeQuery(context.CurrentPluginMetadata.ActionKeyword + " ", true);
-                        app.PostClose();
-                        return true;
-                    }
-                }
-            };
+            Context.API.ChangeQuery(Context.CurrentPluginMetadata.ActionKeyword + " ", true);
+            ActivateWindow();
         }
     }
 }
