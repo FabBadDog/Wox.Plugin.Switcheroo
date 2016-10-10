@@ -35,7 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility" />
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -46,16 +45,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Wox.Infrastructure">
-      <HintPath>..\..\Output\Release\Wox.Infrastructure.dll</HintPath>
+      <HintPath>..\..\Wox.Infrastructure\obj\Release\Wox.Infrastructure.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +69,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="plugin.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\switcheroo.png">

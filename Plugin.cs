@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Runtime.InteropServices;
+using System.Management;
 using System.Windows.Forms;
+using ManagedWinapi;
 using ManagedWinapi.Windows;
 using Switcheroo;
 using Switcheroo.Core;
 using Wox.Infrastructure.Hotkey;
 using Wox.Infrastructure.Storage;
 using Control = System.Windows.Controls.Control;
-using System.Windows;
-using Application = System.Windows.Application;
-using ManagedWinapi;
 
 namespace Wox.Plugin.Switcheroo
 {
@@ -24,7 +21,6 @@ namespace Wox.Plugin.Switcheroo
         private PluginJsonStorage<SwitcherooSettings> _storage;
         private IntPtr _woxWindowHandle;
         protected PluginInitContext Context;
-
 
         public List<Result> LoadContextMenus(Result selectedResult)
         {
@@ -51,6 +47,7 @@ namespace Wox.Plugin.Switcheroo
             _storage = new PluginJsonStorage<SwitcherooSettings>();
             _settings = _storage.Load();
             context.API.GlobalKeyboardEvent += API_GlobalKeyboardEvent;
+            
         }
 
         public List<Result> Query(Query query)
@@ -64,15 +61,17 @@ namespace Wox.Plugin.Switcheroo
             };
 
             var filterResults =
-                new WindowFilterer().Filter(windowContext, queryString).Select(o => o.AppWindow.AppWindow).ToList();
+                new WindowFilterer().Filter(windowContext, queryString).Select(o => o.AppWindow.AppWindow)
+                    .Where(window => window.ProcessTitle != "Wox")
+                    .ToList();
 
 
             return filterResults.Select(o =>
             {
                 return new Result
                 {
-                    Title = o.Title,
-                    SubTitle = o.ProcessTitle,
+                    Title = _settings.SwapTitleAndSubtitle? o.ProcessTitle : GetNormalTitleOrAppFirst(o.Title),
+                    SubTitle = _settings.SwapTitleAndSubtitle ? GetNormalTitleOrAppFirst(o.Title) : o.ProcessTitle,
                     IcoPath = o.ExecutablePath,
                     ContextData = o,
                     Action = con =>
@@ -102,7 +101,7 @@ namespace Wox.Plugin.Switcheroo
             }
 
             Context.API.ShowApp();
-            
+
             if (altKeyPressed)
             {
                 altKey.Release();
@@ -129,6 +128,17 @@ namespace Wox.Plugin.Switcheroo
         {
             Context.API.ChangeQuery(Context.CurrentPluginMetadata.ActionKeyword + " ", true);
             ActivateWindow();
+        }
+        private string GetNormalTitleOrAppFirst(string title)
+        {
+            if (!_settings.ApplicationNameFirst)
+                return title;
+            var lastIndexOfDash = title.LastIndexOf('-');
+            if(lastIndexOfDash == -1)
+                return title;
+            var appName = title.Substring(lastIndexOfDash+2);
+            var restOfTitle = title.Substring(0, title.LastIndexOf('-'));
+            return String.Format("{0} - {1}", appName, restOfTitle);
         }
     }
 }

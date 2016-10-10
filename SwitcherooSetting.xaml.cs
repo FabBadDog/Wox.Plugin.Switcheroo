@@ -34,6 +34,8 @@ namespace Wox.Plugin.Switcheroo
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             cbOverrideAltTab.IsChecked = _settings.OverrideAltTab;
+            cbSwapTitleAndSubtitle.IsChecked = _settings.OverrideAltTab;
+            cbApplicationNameFirst.IsChecked = _settings.OverrideAltTab;
 
             cbOverrideAltTab.Checked += (o, args) =>
             {
@@ -43,6 +45,26 @@ namespace Wox.Plugin.Switcheroo
             cbOverrideAltTab.Unchecked += (o, args) =>
             {
                 _settings.OverrideAltTab = false;
+                _storage.Save();
+            };
+            cbSwapTitleAndSubtitle.Checked += (o, args) =>
+            {
+                _settings.SwapTitleAndSubtitle = true;
+                _storage.Save();
+            };
+            cbSwapTitleAndSubtitle.Unchecked += (o, args) =>
+            {
+                _settings.SwapTitleAndSubtitle = false;
+                _storage.Save();
+            };
+            cbApplicationNameFirst.Checked += (o, args) =>
+            {
+                _settings.ApplicationNameFirst = true;
+                _storage.Save();
+            };
+            cbApplicationNameFirst.Unchecked += (o, args) =>
+            {
+                _settings.ApplicationNameFirst = false;
                 _storage.Save();
             };
         }

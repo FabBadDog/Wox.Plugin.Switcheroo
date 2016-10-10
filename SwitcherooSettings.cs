@@ -11,5 +11,11 @@ namespace Wox.Plugin.Switcheroo
     {
         [JsonProperty]
         public bool OverrideAltTab { get; set; } = false;
+
+        [JsonProperty]
+        public bool SwapTitleAndSubtitle { get; set; } = false;
+
+        [JsonProperty]
+        public bool ApplicationNameFirst { get; set; } = false;
     }
 }

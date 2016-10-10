@@ -8,7 +8,9 @@
              d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
     <Grid>
         <CheckBox x:Name="cbOverrideAltTab" Content="Override Alt Tab with Switcheroo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cbSwapTitleAndSubtitle" Content="Swaps the title and subtitle in the results" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cbApplicationNameFirst" Content="Display the application name first" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"/>
         <TextBlock x:Name="label" Text="Main Switcharoo GitHub page" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="DodgerBlue" TextDecorations="Underline" MouseUp="label_MouseUp"  />
-
+        
     </Grid>
 </UserControl>
