@@ -126,6 +126,7 @@ namespace Wox.Plugin.Switcheroo
 
         private void OnAltTabPressed()
         {
+            Context.API.ChangeQuery(" ", true);
             Context.API.ChangeQuery(Context.CurrentPluginMetadata.ActionKeyword + " ", true);
             ActivateWindow();
         }
