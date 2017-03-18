@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wox.Plugin.Switcheroo", "Wox.Plugin.Switcheroo\Wox.Plugin.Switcheroo.csproj", "{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Switcheroo\Core\Core.csproj", "{B846514D-25BE-4274-972A-0E6E74DD0F8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedWinapi", "Switcheroo\ManagedWinapi\ManagedWinapi.csproj", "{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Switcheroo", "Switcheroo", "{14A1544A-BCA4-4F19-82C5-2BC77B046635}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{469BD9CF-C4DC-4B6A-9C43-306B259B31B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B846514D-25BE-4274-972A-0E6E74DD0F8B} = {14A1544A-BCA4-4F19-82C5-2BC77B046635}
+		{FBD3EC1E-47E2-4D2D-81C9-D6506125A09A} = {14A1544A-BCA4-4F19-82C5-2BC77B046635}
+	EndGlobalSection
+EndGlobal

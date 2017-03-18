@@ -4,7 +4,7 @@
     "Name": "Switcheroo for Wox",
     "Description": "The humble incremental-search task switcher for Wox",
     "Author": "orzFly, Regin Larsen, James Sulak, qianlifeng",
-    "Version": "1.0.8",
+    "Version": "1.0.9",
     "Language": "csharp",
     "Website": "https://github.com/Wox-launcher/Wox.Plugin.Switcheroo",
     "IcoPath": "Images\\switcheroo.png",

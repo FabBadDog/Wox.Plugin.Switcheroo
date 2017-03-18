@@ -41,6 +41,9 @@ namespace Wox.Plugin.Switcheroo
             {
                 _settings.OverrideAltTab = true;
                 _storage.Save();
+                MessageBox.Show("In order to be able to reliably override Alt+Tab\r\n" +
+                                "you will need to run Wox as Administrator",
+                    "Wox.Plugin.Switcheroo", MessageBoxButton.OK, MessageBoxImage.Information);
             };
             cbOverrideAltTab.Unchecked += (o, args) =>
             {
